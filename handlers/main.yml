@@ -1,0 +1,15 @@
+---
+- name: restart ntp
+  service: name=ntp state=restarted
+
+- name: restart newrelic-sysmond
+  service: name=newrelic-sysmond state=restarted
+
+- name: restart cron
+  service: name=cron state=restarted
+
+- name: restart monit
+  service: name=monit state=restarted
+
+- name: swap used
+  command: swapon -a

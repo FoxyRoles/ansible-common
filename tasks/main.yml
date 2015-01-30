@@ -1,0 +1,15 @@
+---
+
+- include: swap.yml
+- include: apt.yml
+- include: purge.yml
+- include: locales.yml
+- include: packages.yml
+- include: bash.yml
+- include: ntp.yml
+- include: postfix.yml
+- include: monit.yml
+- include: newrelic-sysmond.yml
+- include: ipmitool.yml
+- include: smartmontools.yml
+- include: cron.yml

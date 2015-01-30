@@ -1,0 +1,14 @@
+---
+
+- name: ensure not installed
+  apt: pkg={{ item }} state=absent purge=yes
+  with_items:
+   - ppp
+   - pppconfig
+   - pppoeconf
+   - popularity-contest
+   - ntfs-3g
+   - laptop-detect
+   - apparmor
+   - libapparmor-perl
+  tags: purge

@@ -1,0 +1,11 @@
+---
+
+- name: monit is installed
+  apt: pkg=monit state=installed
+  tags: monit
+
+- name: monit is configured
+  template: src=monitrc.j2 dest=/etc/monit/monitrc
+  notify:
+   - restart monit
+  tags: monit

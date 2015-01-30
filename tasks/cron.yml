@@ -1,0 +1,6 @@
+---
+
+- name: cron mailto set
+  lineinfile: dest=/etc/crontab regexp=^MAILTO= line=MAILTO={{ admin_email }} insertafter=^PATH=
+  notify:
+   - restart cron

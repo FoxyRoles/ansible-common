@@ -1,0 +1,7 @@
+---
+
+- name: make bash default shell
+  dpkg_reconfigure:
+    pkg: dash
+    answers:
+      dash/sh: false

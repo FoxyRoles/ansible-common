@@ -1,0 +1,20 @@
+// {{ ansible_managed }}
+
+driftfile /var/lib/ntp/ntp.drift
+logfile /var/log/ntp.log
+
+# by default act only as a basic NTP client
+restrict -4 default ignore
+restrict -6 default ignore
+
+# allow NTP messages from the loopback address, useful for debugging
+restrict 127.0.0.1
+restrict ::1
+
+# allow servers we are synchronizing with:
+restrict -4 {{ ntp1 }} nomodify nopeer
+restrict -4 {{ ntp2 }} nomodify nopeer
+
+# server(s) we time sync to
+server {{ ntp1 }}
+server {{ ntp2 }}

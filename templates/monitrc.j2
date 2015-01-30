@@ -1,0 +1,17 @@
+set daemon 60
+    with start delay 120
+
+set logfile /var/log/monit.log
+set idfile /var/lib/monit/id
+set statefile /var/lib/monit/state
+set mailserver localhost
+
+set eventqueue
+    basedir /var/lib/monit/events
+    slots 100
+
+set httpd port 2812 and
+    use address 0.0.0.0
+    allow {{ allow_global_ip }}
+
+include /etc/monit/conf.d/*
