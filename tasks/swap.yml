@@ -4,9 +4,13 @@
   shell: lsblk -r -f|grep swap|cut -d' ' -f 1
   register: swap_partitions
 
+- name: check swap partitions in /etc/fstab
+  shell: cat /etc/fstab|grep ".\s.\sswap"
+  register: swap_partitions_used
+
 - name: ensure swap partitions present in /etc/fstab
   lineinfile: dest=/etc/fstab regexp=^/dev/{{ item }} line="/dev/{{ item }}       none            swap    sw                         0 0"
   with_items: swap_partitions.stdout_lines
   notify:
    - swap used
-  when: swap_partitions.stdout
+  when: swap_partitions.stdout and not swap_partitions_used.stdout
