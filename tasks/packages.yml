@@ -3,6 +3,9 @@
 - name: ensure basic packages are installed
   apt: pkg={{ item }} state=present
   with_items:
+   - landscape-common
+   - software-properties-common
+   - bash-completion
    - acpid
    - htop
    - mc
