@@ -1,7 +1,7 @@
 ---
 
 - name: apt cache updated
-  apt: update_cache=True
+  apt: update_cache=True cache_valid_time=86400
 
 - name: unattended-upgrades package is installed
   apt: pkg=unattended-upgrades state=installed
