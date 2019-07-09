@@ -1,9 +1,78 @@
 ---
 
-- name: postfix is installed
-  apt: pkg=postfix state=installed
+- name: postfix is present
+  apt: pkg=postfix state=present
   tags: postfix
 
+- name: postfix myhostname is set
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^myhostname"
+    line: "myhostname = {{ postfix_myhostname }}"
+  tags: postfix
+  notify:
+   - restart postfix
+  when: postfix_myhostname is defined
+
+- name: postfix mydestionation is set
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^mydestination"
+    line: "mydestination = $myhostname, localhost"
+  tags: postfix
+  notify:
+   - restart postfix
+
+- name: postfix inet_protocols is set to ipv4
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^inet_protocols"
+    line: "inet_protocols = ipv4"
+    insertafter: "^inet_interfaces"
+  tags: postfix
+  notify:
+   - restart postfix
+
+- name: postfix smtp_tls_security_level is set to may
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtp_tls_security_level"
+    line: "smtp_tls_security_level = may"
+    insertafter: "^smtpd_use_tls"
+  tags: postfix
+  notify:
+   - restart postfix
+
+- name: postfix smtp_tls_loglevel is set to 1
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtp_tls_loglevel"
+    line: "smtp_tls_loglevel = 1"
+    insertafter: "^smtp_tls_security_level"
+  tags: postfix
+  notify:
+   - restart postfix
+
+- name: postfix smtp_tls_CApath is set
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtp_tls_CApath"
+    line: "smtp_tls_CApath = /etc/ssl/certs"
+    insertafter: "^smtp_tls_session_cache_database"
+  tags: postfix
+  notify:
+   - restart postfix
+
+- name: postfix smtpd_tls_CApath is set
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtpd_tls_CApath"
+    line: "smtpd_tls_CApath = /etc/ssl/certs"
+    insertafter: "^smtp_tls_CApath"
+  tags: postfix
+  notify:
+   - restart postfix
+
 - name: postfix is running
-  service: name=postfix state=running enabled=yes
+  service: name=postfix state=started enabled=yes
   tags: postfix

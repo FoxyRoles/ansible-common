@@ -1,7 +1,8 @@
 ---
 
-- name: make bash default shell
-  dpkg_reconfigure:
-    pkg: dash
-    answers:
-      dash/sh: false
+- name: bash is default shell
+  debconf:
+    name: dash
+    question: "dash/sh"
+    value: "false"
+    vtype: boolean

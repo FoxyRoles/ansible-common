@@ -9,6 +9,3 @@
    - popularity-contest
    - ntfs-3g
    - laptop-detect
-   - apparmor
-   - libapparmor-perl
-  tags: purge

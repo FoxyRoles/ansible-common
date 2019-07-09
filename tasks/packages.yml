@@ -1,13 +1,17 @@
 ---
 
-- name: ensure basic packages are installed
+- name: ensure basic packages are present
   apt: pkg={{ item }} state=present
   with_items:
-   - landscape-common
-   - software-properties-common
-   - bash-completion
    - acpid
+   - bash-completion
+   - bind9-host
+   - curl
+   - haveged
    - htop
+   - landscape-common
    - mc
+   - ncdu
+   - software-properties-common
    - vim
   tags: packages

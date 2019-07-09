@@ -1,0 +1,21 @@
+---
+
+- name: ensure net.ifnames is disabled in kernel
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*net\.ifnames)\"[^\"]+)(\".*)'
+    line: '\1 net.ifnames=0\2'
+  notify:
+   - update grub
+
+- name: ensure biosdevname is disabled in kernel
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.*biosdevname)\"[^\"]+)(\".*)'
+    line: '\1 biosdevname=0\2'
+  notify:
+   - update grub

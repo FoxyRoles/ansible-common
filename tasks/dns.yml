@@ -1,0 +1,26 @@
+---
+
+- name: ensure systemd-resolved is disabled
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+  when: ansible_distribution_version != "14.04"
+
+- name: check if /etc/resolv.conf is symlink
+  stat: path=/etc/resolv.conf
+  register: resolvconf
+
+- name: ensure /etc/resolv.conf is not symlink
+  file:
+    path: /etc/resolv.conf
+    state: absent
+  when: resolvconf.stat.islnk is defined and resolvconf.stat.islnk
+
+- name: ensure /etc/resolv.conf exists and have nameservers set
+  copy:
+    dest: /etc/resolv.conf
+    content: |
+      nameserver {{ ns1 }}
+      nameserver {{ ns2 }}
+    force: no

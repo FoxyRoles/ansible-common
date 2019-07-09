@@ -1,0 +1,13 @@
+---
+
+- name: Ensure fail2ban is present
+  apt:
+    name: fail2ban
+    state: present
+- name: Ensure Admin IP is present in jail.conf
+  lineinfile:
+    dest: /etc/fail2ban/jail.conf
+    regexp: "^ignoreip ="
+    line: "ignoreip = 127.0.0.1/8 {{ allow_global_ip }}/32"
+  notify:
+   - restart fail2ban

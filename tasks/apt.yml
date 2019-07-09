@@ -1,16 +1,17 @@
 ---
 
-- name: apt cache updated
+- name: apt cache is updated
   apt: update_cache=True cache_valid_time=86400
 
-- name: unattended-upgrades package is installed
-  apt: pkg=unattended-upgrades state=installed
+- name: unattended-upgrades package is present
+  apt: pkg=unattended-upgrades state=present
 
 - name: unattended-upgrades is configured
   template: src=unattended-upgrades.j2 dest=/etc/apt/apt.conf.d/50unattended-upgrades
 
-- name: configure unattended-upgrades to allow autoupgrade
-  dpkg_reconfigure:
-    pkg: unattended-upgrades
-    answers:
-      unattended-upgrades/enable_auto_updates: true
+- name: unattended-upgrades autoupgrade is allowed
+  debconf:
+    name: unattended-upgrades
+    question: "unattended-upgrades/enable_auto_updates"
+    value: "true"
+    vtype: boolean

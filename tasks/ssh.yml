@@ -1,0 +1,18 @@
+---
+
+- name: Check users exist
+  stat: path="/home/{{ item }}"
+  register: user_present
+  with_items:
+   - liquid
+   - web
+
+- name: ssh authorized_keys present
+  authorized_key: user="{{ item.pw_name }}" key="{{ lookup('file', '/home/liquid/.ssh/id_rsa.pub') }}"
+  when: item.exists
+  with_items: "{{ user_present.results|map(attribute='stat')|list }}"
+  tags: authorized_keys
+
+- name: ssh authorized_keys present root
+  authorized_key: user=root key="{{ lookup('file', '/home/liquid/.ssh/id_rsa.pub') }}"
+  tags: authorized_keys

@@ -29,6 +29,7 @@ Common task to setup Ubuntu machine after instalation
 12. Install ipmitool (if not on VPS)
 13. Install smartmontools (if not on VPS)
 14. Set MAILTO for crontab
+15. Set net.ifnames=0 and biosdevname=0 for grub to allow old ethX nic names
 
 ## Example playboot
 

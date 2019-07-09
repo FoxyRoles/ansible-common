@@ -8,5 +8,14 @@
 - name: restart monit
   service: name=monit state=restarted
 
+- name: restart postfix
+  service: name=postfix state=restarted
+
+- name: restart fail2ban
+  service: name=fail2ban state=restarted
+
 - name: swap used
   command: swapon -a
+
+- name: update grub
+  raw: update-grub
