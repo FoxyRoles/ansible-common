@@ -9,6 +9,7 @@
     dest: /etc/postfix/main.cf
     regexp: "^myhostname"
     line: "myhostname = {{ postfix_myhostname }}"
+    insertbefore: "^mydestination"
   tags: postfix
   notify:
    - restart postfix
