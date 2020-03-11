@@ -1,7 +1,4 @@
 ---
 
-ns1: 8.8.8.8
-ns2: 8.8.4.4
-
-ntp1: tik.cesnet.cz
-ntp2: tak.cesnet.cz
+ns1: 1.1.1.1
+ns2: 1.0.0.1
