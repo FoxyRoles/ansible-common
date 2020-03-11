@@ -1,0 +1,11 @@
+---
+- name: MOTD help text is disabled
+  file:
+    path: /etc/update-motd.d/10-help-text
+    mode: "0644"
+
+- name: MOTD news are disabled
+  lineinfile:
+    dest: /etc/default/motd-news
+    regexp: ^ENABLED=
+    line: ENABLED=0
