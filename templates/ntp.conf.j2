@@ -12,9 +12,13 @@ restrict 127.0.0.1
 restrict ::1
 
 # allow servers we are synchronizing with:
-restrict -4 {{ ntp1 }} nomodify nopeer
-restrict -4 {{ ntp2 }} nomodify nopeer
+restrict -4 0.cz.pool.ntp.org nomodify nopeer
+restrict -4 1.cz.pool.ntp.org nomodify nopeer
+restrict -4 2.cz.pool.ntp.org nomodify nopeer
+restrict -4 3.cz.pool.ntp.org nomodify nopeer
 
 # server(s) we time sync to
-server {{ ntp1 }}
-server {{ ntp2 }}
+server 0.cz.pool.ntp.org
+server 1.cz.pool.ntp.org
+server 2.cz.pool.ntp.org
+server 3.cz.pool.ntp.org
