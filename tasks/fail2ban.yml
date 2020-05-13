@@ -14,7 +14,7 @@
 - name: Ensure Admin IP is present in jail.conf
   lineinfile:
     dest: /etc/fail2ban/jail.conf
-    regexp: "^ignoreip ="
-    line: "ignoreip = 127.0.0.1/8 {{ allow_global_ip }}/32"
+    regexp: "^#?ignoreip ="
+    line: "ignoreip = 127.0.0.1/8 ::1 {{ allow_global_ip }}/32"
   notify:
    - restart fail2ban
