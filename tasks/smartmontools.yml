@@ -1,6 +1,8 @@
 ---
 
 - name: smartmontools is installed
-  apt: pkg=smartmontools state=installed
+  apt:
+    pkg: smartmontools
+    state: present
   when: ansible_virtualization_role != "guest"
   tags: smart

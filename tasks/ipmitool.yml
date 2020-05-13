@@ -1,6 +1,8 @@
 ---
 
-- name: ipmitool is installed
-  apt: pkg=ipmitool state=installed
+- name: ipmitool is present
+  apt:
+    pkg: ipmitool
+    state: present
   when: ansible_virtualization_role != "guest"
   tags: ipmi

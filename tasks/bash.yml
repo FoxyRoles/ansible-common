@@ -6,3 +6,9 @@
     question: "dash/sh"
     value: "false"
     vtype: boolean
+
+- name: copy .bashrc
+  copy:
+    src: .bashrc
+    dest: /root/.bashrc
+    mode: 0644
