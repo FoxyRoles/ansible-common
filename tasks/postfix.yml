@@ -74,6 +74,16 @@
   notify:
    - restart postfix
 
+- name: postfix smtputf8_enable is set to no
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtputf8_enable"
+    line: "smtputf8_enable = no"
+    insertafter: "^compatibility_level"
+
 - name: postfix is running
-  service: name=postfix state=started enabled=yes
+  service:
+    name: postfix
+    state: started
+    enabled: yes
   tags: postfix

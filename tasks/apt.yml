@@ -1,13 +1,19 @@
 ---
 
 - name: apt cache is updated
-  apt: update_cache=True cache_valid_time=86400
+  apt:
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - name: unattended-upgrades package is present
-  apt: pkg=unattended-upgrades state=present
+  apt:
+    pkg: unattended-upgrades
+    state: present
 
 - name: unattended-upgrades is configured
-  template: src=unattended-upgrades.j2 dest=/etc/apt/apt.conf.d/50unattended-upgrades
+  template:
+    src: unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
 
 - name: unattended-upgrades autoupgrade is allowed
   debconf:
@@ -15,3 +21,10 @@
     question: "unattended-upgrades/enable_auto_updates"
     value: "true"
     vtype: boolean
+
+- name: disable apt news
+  lineinfile:
+    dest: /etc/ubuntu-advantage/uaclient.conf
+    regexp: "^  apt_news:"
+    line: "  apt_news: false"
+  when: ansible_distribution_version in ["22.04"]

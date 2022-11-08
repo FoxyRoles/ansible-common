@@ -4,5 +4,4 @@
   apt:
     pkg: smartmontools
     state: present
-  when: ansible_virtualization_role != "guest"
   tags: smart

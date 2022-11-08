@@ -1,15 +1,29 @@
 ---
 
 - name: ntp is present
-  apt: pkg=ntp state=present
+  apt:
+    pkg: ntp
+    state: present
   tags: ntp
 
 - name: ntp is configured
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
   notify:
    - restart ntp
   tags: ntp
 
 - name: ntp is running
-  service: name=ntp state=started enabled=yes
+  service:
+    name: ntp
+    state: started
+    enabled: yes
+  tags: ntp
+
+- name: systemd-timesyncd is disabled
+  service:
+    name: systemd-timesyncd
+    state: stopped
+    enabled: no
   tags: ntp

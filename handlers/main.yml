@@ -1,21 +1,36 @@
 ---
 - name: restart ntp
-  service: name=ntp state=restarted
+  service:
+    name: ntp
+    state: restarted
 
 - name: restart cron
-  service: name=cron state=restarted
+  service:
+    name: cron
+    state: restarted
 
 - name: restart monit
-  service: name=monit state=restarted
+  service:
+    name: monit
+    state: restarted
 
 - name: restart postfix
-  service: name=postfix state=restarted
+  service:
+    name: postfix
+    state: restarted
 
 - name: restart fail2ban
-  service: name=fail2ban state=restarted
+  service:
+    name: fail2ban
+    state: restarted
+
+- name: restart journald
+  service:
+    name: systemd-journald
+    state: restarted
 
 - name: swap used
   command: swapon -a
 
 - name: update grub
-  raw: update-grub
+  command: update-grub

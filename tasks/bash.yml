@@ -7,8 +7,14 @@
     value: "false"
     vtype: boolean
 
-- name: copy .bashrc
+- name: copy /root/.bashrc
   copy:
-    src: .bashrc
+    src: root.bashrc
     dest: /root/.bashrc
+    mode: 0644
+
+- name: copy /etc/skel/.bashrc
+  copy:
+    src: skel.bashrc
+    dest: /etc/skel/.bashrc
     mode: 0644

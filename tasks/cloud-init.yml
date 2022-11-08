@@ -1,0 +1,12 @@
+---
+
+- name: Check if /etc/cloud directory exists
+  stat:
+    path: /etc/cloud
+  register: clouddir
+
+- name: Disable cloud-init
+  copy:
+    content: ""
+    dest: /etc/cloud/cloud-init.disabled
+  when: clouddir.stat.isdir is defined and clouddir.stat.isdir

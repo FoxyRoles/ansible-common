@@ -1,11 +1,13 @@
 ---
 
 - name: ensure not installed
-  apt: pkg={{ item }} state=absent purge=yes
-  with_items:
-   - ppp
-   - pppconfig
-   - pppoeconf
-   - popularity-contest
-   - ntfs-3g
-   - laptop-detect
+  apt:
+    pkg:
+      - ppp
+      - pppconfig
+      - pppoeconf
+      - popularity-contest
+      - ntfs-3g
+      - laptop-detect
+    state: absent
+    purge: yes

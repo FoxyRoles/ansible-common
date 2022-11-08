@@ -4,5 +4,4 @@
   apt:
     pkg: ipmitool
     state: present
-  when: ansible_virtualization_role != "guest"
   tags: ipmi

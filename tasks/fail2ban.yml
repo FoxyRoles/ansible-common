@@ -4,6 +4,7 @@
   apt:
     name: fail2ban
     state: present
+
 - name: Ensure log level is set to NOTICE
   lineinfile:
     dest: /etc/fail2ban/fail2ban.conf
@@ -11,6 +12,7 @@
     line: "loglevel = NOTICE"
   notify:
    - restart fail2ban
+
 - name: Ensure Admin IP is present in jail.conf
   lineinfile:
     dest: /etc/fail2ban/jail.conf

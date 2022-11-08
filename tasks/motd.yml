@@ -4,8 +4,14 @@
     path: /etc/update-motd.d/10-help-text
     mode: "0644"
 
+- name: Check if /etc/default/motd-news file exists
+  stat:
+    path: /etc/default/motd-news
+  register: motdnews
+
 - name: MOTD news are disabled
   lineinfile:
     dest: /etc/default/motd-news
     regexp: ^ENABLED=
     line: ENABLED=0
+  when: motdnews.stat.isfile is defined and motdnews.stat.isfile

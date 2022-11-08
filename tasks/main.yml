@@ -7,8 +7,14 @@
 - import_tasks: dns.yml
 - import_tasks: fail2ban.yml
 - import_tasks: ipmitool.yml
+  when: ansible_virtualization_role != "guest"
 - import_tasks: smartmontools.yml
+  when: ansible_virtualization_role != "guest"
 - import_tasks: motd.yml
 - import_tasks: ntp.yml
 - import_tasks: postfix.yml
 - import_tasks: ssh.yml
+- import_tasks: cloud-init.yml
+  when: ansible_distribution_version in ["20.04", "22.04"]
+- import_tasks: systemd.yml
+  when: ansible_distribution_version in ["18.04", "20.04", "22.04"]

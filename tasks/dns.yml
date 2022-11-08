@@ -8,7 +8,8 @@
   when: ansible_distribution_version != "14.04"
 
 - name: check if /etc/resolv.conf is symlink
-  stat: path=/etc/resolv.conf
+  stat:
+    path: /etc/resolv.conf
   register: resolvconf
 
 - name: ensure /etc/resolv.conf is not symlink
@@ -21,6 +22,7 @@
   copy:
     dest: /etc/resolv.conf
     content: |
-      nameserver {{ ns1 }}
-      nameserver {{ ns2 }}
+      {% for server in dns_servers %}
+      nameserver {{ server }}
+      {% endfor %}
     force: no

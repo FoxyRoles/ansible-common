@@ -6,3 +6,4 @@
     state: present
     update_password: always
     password: "{{ root_default_password }}"
+  when: root_default_password is defined
