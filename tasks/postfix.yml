@@ -6,7 +6,19 @@
     state: present
   tags: postfix
 
-- name: postfix myhostname is set
+- name: root mail is forwarded to {{ admin_email }}
+  ansible.builtin.lineinfile:
+    path: /etc/aliases
+    regexp: '^[ \t]*root[ \t]*:'
+    line: "root: {{ admin_email }}"
+    create: true
+    owner: root
+    group: root
+    mode: "0644"
+  notify: update aliases
+  tags: postfix
+
+- name: postfix myhostname is set to {{ postfix_myhostname }}
   lineinfile:
     dest: /etc/postfix/main.cf
     regexp: "^myhostname"
@@ -82,6 +94,9 @@
     regexp: "^smtputf8_enable"
     line: "smtputf8_enable = no"
     insertafter: "^compatibility_level"
+  tags: postfix
+  notify:
+   - restart postfix
 
 - name: postfix is running
   service:

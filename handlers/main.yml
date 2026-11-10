@@ -19,6 +19,9 @@
     name: postfix
     state: restarted
 
+- name: update aliases
+  ansible.builtin.command: newaliases
+
 - name: restart fail2ban
   service:
     name: fail2ban
