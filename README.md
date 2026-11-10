@@ -148,8 +148,19 @@ origin are not enabled by this list. Error reports go to `admin_email` using
 `MailReport = only-on-error`. Unused automatically installed packages are removed
 after upgrades, equivalent to `apt autoremove`.
 
-The APT tasks also divert the Ubuntu ESM APT hook and ESM Apps source file to
-names ending in `.disabled`.
+The APT tasks import [tasks/ubuntu-pro.yml](tasks/ubuntu-pro.yml) to suppress
+Ubuntu Pro messages while keeping the Pro client installed. APT News is disabled
+through `pro config set apt_news=false`. The role manages
+`/etc/apt/apt.conf.d/20apt-esm-hook.conf` with no hook commands, leaving other APT
+hooks unchanged. Legacy diversions and their `.disabled` copies are removed;
+the Pro client remains responsible for its private ESM cache and source files.
+
+The MOTD tasks remove the update summary and Ubuntu Pro message scripts
+(`88-esm-announce`, `90-updates-available` and `91-contract-ua-esm-status`). These
+are configuration files whose removal is preserved during normal package
+upgrades. See the Ubuntu documentation for
+[APT News](https://ubuntu.com/pro-client/docs/en/docs/howtoguides/disable_enable_apt_news/)
+and [MOTD messages](https://ubuntu.com/pro-client/docs/en/latest/explanations/motd_messages/).
 
 ## Other task groups
 

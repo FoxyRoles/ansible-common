@@ -14,6 +14,7 @@
 - import_tasks: smartmontools.yml
   when: ansible_virtualization_role != "guest"
 - import_tasks: motd.yml
+- import_tasks: ubuntu-pro.yml
 - import_tasks: ntp.yml
 - import_tasks: systemd-timesyncd.yml
 - import_tasks: chrony.yml

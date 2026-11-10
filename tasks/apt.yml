@@ -8,22 +8,12 @@
   when: ansible_facts['distribution_version'] is version('24.04', '>=')
   register: apt_mirror_source
 
+- ansible.builtin.import_tasks: ubuntu-pro.yml
+
 - name: apt cache is updated
   apt:
     update_cache: true
     cache_valid_time: "{{ 0 if apt_mirror_source is changed else apt_cache_valid_time }}"
-
-- name: Divert and rename apt-esm-hook
-  community.general.dpkg_divert:
-    path: /etc/apt/apt.conf.d/20apt-esm-hook.conf
-    divert: /etc/apt/apt.conf.d/20apt-esm-hook.conf.disabled
-    rename: true
-
-- name: Divert and rename ubuntu-esm-apps.sources
-  community.general.dpkg_divert:
-    path: /var/lib/ubuntu-advantage/apt-esm/etc/apt/sources.list.d/ubuntu-esm-apps.sources
-    divert: /var/lib/ubuntu-advantage/apt-esm/etc/apt/sources.list.d/ubuntu-esm-apps.sources.disabled
-    rename: true
 
 - name: unattended-upgrades package is present
   apt:

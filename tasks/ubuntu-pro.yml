@@ -1,0 +1,62 @@
+---
+
+- name: Check if the Ubuntu Pro client is installed
+  ansible.builtin.stat:
+    path: /usr/bin/pro
+  register: ubuntu_pro_client
+
+- name: Disable APT news through the Ubuntu Pro client
+  when: ubuntu_pro_client.stat.exists
+  environment:
+    LC_ALL: C
+  block:
+    - name: Read the APT news setting
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/pro
+          - config
+          - show
+          - apt_news
+      register: ubuntu_pro_apt_news
+      changed_when: false
+      check_mode: false
+
+    - name: Disable APT news
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/pro
+          - config
+          - set
+          - apt_news=false
+      when: ubuntu_pro_apt_news.stdout is not search('(?im)^apt_news[ \t]+false[ \t]*$')
+      changed_when: true
+
+# Do not restore diverted copies: the Pro client may already have recreated
+# its private source file. Manage the hook below and leave cache creation to Pro.
+- name: Remove legacy Ubuntu Pro diversions
+  community.general.dpkg_divert:
+    path: "{{ item }}"
+    state: absent
+    rename: false
+  loop:
+    - /etc/apt/apt.conf.d/20apt-esm-hook.conf
+    - /var/lib/ubuntu-advantage/apt-esm/etc/apt/sources.list.d/ubuntu-esm-apps.sources
+
+- name: Disable Ubuntu Pro APT hooks
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20apt-esm-hook.conf
+    content: |
+      // Managed by Ansible: Ubuntu Pro APT hooks are disabled.
+    owner: root
+    group: root
+    mode: "0644"
+    validate: apt-config -c %s dump
+  when: ubuntu_pro_client.stat.exists
+
+- name: Remove files left by legacy Ubuntu Pro diversions
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/apt/apt.conf.d/20apt-esm-hook.conf.disabled
+    - /var/lib/ubuntu-advantage/apt-esm/etc/apt/sources.list.d/ubuntu-esm-apps.sources.disabled
