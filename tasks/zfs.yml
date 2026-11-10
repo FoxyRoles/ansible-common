@@ -1,13 +1,23 @@
 ---
 
-- name: Check if /usr/sbin/zpool exists
-  stat:
-    path: /usr/sbin/zpool
-  register: zpool_bin
-  
+- name: Check whether zfsutils-linux is installed
+  ansible.builtin.command:
+    argv:
+      - dpkg-query
+      - --show
+      - '--showformat=${db:Status-Status}'
+      - zfsutils-linux
+    expand_argument_vars: false
+  register: zfsutils_linux_package
+  changed_when: false
+  failed_when: zfsutils_linux_package.rc not in [0, 1]
+  check_mode: false
+
 - name: Divert zpool_influxdb to influxdb_zpool
   community.general.dpkg_divert:
     path: /usr/bin/zpool_influxdb
     divert: /usr/bin/influxdb_zpool
     rename: true
-  when: zpool_bin.stat.exists
+  when:
+    - zfsutils_linux_package.rc == 0
+    - zfsutils_linux_package.stdout == 'installed'

@@ -1,9 +1,22 @@
 ---
 
+- name: Ensure the journald configuration directory exists
+  ansible.builtin.file:
+    path: /etc/systemd/journald.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
 - name: Limit for /var/log/journal directory is set
-  lineinfile:
-    dest: /etc/systemd/journald.conf
-    regexp: "^#?SystemMaxUse="
-    line: "SystemMaxUse={{ systemd_journal_max_size }}"
+  ansible.builtin.copy:
+    dest: /etc/systemd/journald.conf.d/99-common.conf
+    content: |
+      # Managed by Ansible.
+      [Journal]
+      SystemMaxUse={{ systemd_journal_max_size }}
+    owner: root
+    group: root
+    mode: "0644"
   notify:
    - restart journald
