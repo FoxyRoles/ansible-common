@@ -1,45 +1,11 @@
 ---
 
-#- name: systemd-timesyncd is present
-#  apt:
-#    pkg: systemd-timesyncd
-#    state: present
-#  when: >-
-#    ansible_facts['distribution_version'] is version('20.04', '==') or
-#    ansible_facts['distribution_version'] is version('22.04', '==')
-#  tags: ntp
-
-#- name: systemd-timesyncd is enabled
-#  service:
-#    name: systemd-timesyncd
-#    state: started
-#    enabled: yes
-#  tags: ntp
-
-#- name: systemd-timesyncd is configured
-#  lineinfile:
-#    state: present
-#    dest: /etc/systemd/timesyncd.conf
-#    regexp: '^#?NTP='
-#    line: "NTP={{ ntp_server }}"
-#  notify:
-#    - restart systemd-timesyncd
-
-#- name: Populate service facts
-#  service_facts:
-
-- name: Check if /etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service file exists
-  stat:
-    path: /etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service
-  register: timesyncdservice
-
 - name: systemd-timesyncd is not running
-  service:
+  ansible.builtin.service:
     name: systemd-timesyncd
     state: stopped
     enabled: no
-#  when: "'systemd-timesyncd.service' in services"
-  when: timesyncdservice.stat.exists
+  when: ansible_facts['services']['systemd-timesyncd.service']['status'] | default('not-found') != 'not-found'
   tags: systemd-timesyncd
 
 - name: systemd-timesyncd is absent

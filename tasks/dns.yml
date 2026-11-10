@@ -1,16 +1,11 @@
 ---
 
-- name: Check if /etc/systemd/system/multi-user.target.wants/systemd-resolved.service file exists
-  stat:
-    path: /etc/systemd/system/multi-user.target.wants/systemd-resolved.service
-  register: resolvedservice
-
 - name: ensure systemd-resolved is disabled
-  systemd:
+  ansible.builtin.systemd_service:
     name: systemd-resolved
     state: stopped
     enabled: no
-  when: resolvedservice.stat.exists
+  when: ansible_facts['services']['systemd-resolved.service']['status'] | default('not-found') != 'not-found'
 
 - name: check if /etc/resolv.conf is symlink
   stat:

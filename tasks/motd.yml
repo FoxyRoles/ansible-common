@@ -23,6 +23,17 @@
     mode: "0644"
   when: helptext.stat.exists
 
+- name: Check if /etc/update-motd.d/90-updates-available file exists
+  ansible.builtin.stat:
+    path: /etc/update-motd.d/90-updates-available
+  register: updatesavailable
+
+- name: MOTD available updates and ESM messages are disabled
+  ansible.builtin.file:
+    path: /etc/update-motd.d/90-updates-available
+    mode: "0644"
+  when: updatesavailable.stat.exists
+
 - name: Check if /etc/update-motd.d/91-contract-ua-esm-status file exists
   stat:
     path: /etc/update-motd.d/91-contract-ua-esm-status

@@ -1,5 +1,8 @@
 ---
 
+- name: Gather service facts
+  ansible.builtin.service_facts:
+
 - import_tasks: locales.yml
 - import_tasks: apt.yml
 - import_tasks: packages.yml
@@ -20,4 +23,4 @@
 - import_tasks: sysctl.yml
 - import_tasks: systemd.yml
 - import_tasks: zfs.yml
-  when: ansible_distribution_version in ["24.04"]
+  when: ansible_facts['distribution_version'] is version('24.04', '>=')

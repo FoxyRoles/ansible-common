@@ -1,20 +1,11 @@
 ---
 
-#- name: Populate service facts
-#  service_facts:
-
-- name: Check if /etc/systemd/system/ntp.service file exists
-  stat:
-    path: /etc/systemd/system/ntp.service
-  register: ntpservice
-
 - name: ntp is not running
-  service:
+  ansible.builtin.service:
     name: ntp
     state: stopped
     enabled: no
-#  when: "'ntp.service' in ansible_facts.services"
-  when: ntpservice.stat.exists
+  when: ansible_facts['services']['ntp.service']['status'] | default('not-found') != 'not-found'
   tags: ntp
 
 - name: ntp is absent

@@ -115,7 +115,7 @@ locales:
 | --- | --- |
 | `apt_cache_valid_time` | APT cache validity in seconds. A mirror change forces a cache refresh. |
 | `apt_mirror` | Archive hostname, without a URL scheme or path. On Ubuntu 24.04 and later, replaces standard, regional or cloud `archive.ubuntu.com` hostnames in `/etc/apt/sources.list.d/ubuntu.sources`, preserving the rest of the file. Security and ports archive URLs are left unchanged. |
-| `dns_servers` | Nameservers written to `/etc/resolv.conf` when creating it. The DNS tasks disable an enabled systemd-resolved service when its checked enablement link exists, remove a resolv.conf symlink and create a regular file. An existing regular file is not overwritten. |
+| `dns_servers` | Nameservers written to `/etc/resolv.conf` when creating it. The DNS tasks use service facts to stop and disable systemd-resolved when installed, remove a resolv.conf symlink and create a regular file. An existing regular file is not overwritten. |
 | `systemd_journal_max_size` | Value of `SystemMaxUse` in `/etc/systemd/journald.conf`. Changes restart journald. |
 | `timezone` | System timezone managed by `community.general.timezone`. Changes notify the cron restart handler. |
 | `locales` | Locales ensured present by `community.general.locale_gen`; other enabled locales are not automatically removed. Before Ubuntu 26.04, an existing `/var/lib/locales/supported.d/en` is restricted to `en_US.UTF-8 UTF-8`, independently of this list. |
