@@ -1,5 +1,14 @@
 ---
 
+- name: Disable default Ubuntu time sources
+  ansible.builtin.debconf:
+    name: chrony
+    question: chrony/configure_ubuntu_pools_in_sourcesd
+    value: "false"
+    vtype: boolean
+  when: ansible_facts['distribution_version'] is version('24.10', '>=')
+  tags: chrony
+
 - name: chrony is present
   apt:
     pkg: chrony
@@ -17,6 +26,14 @@
   lineinfile:
     dest: /etc/chrony/chrony.conf
     regexp: '^pool '
+    state: absent
+  notify:
+    - restart chrony
+  tags: chrony
+
+- name: ubuntu default servers are absent
+  file:
+    path: /etc/chrony/sources.d/ubuntu-ntp-pools.sources
     state: absent
   notify:
     - restart chrony
