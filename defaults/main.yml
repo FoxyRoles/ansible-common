@@ -1,6 +1,7 @@
 ---
 
 apt_cache_valid_time: 86400
+apt_mirror: cz.archive.ubuntu.com
 
 dns_servers:
   - 1.1.1.1
@@ -9,3 +10,6 @@ dns_servers:
 systemd_journal_max_size: 100M
 
 timezone: Europe/Prague
+locales:
+  - en_US.UTF-8
+  - cs_CZ.UTF-8

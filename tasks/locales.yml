@@ -1,19 +1,28 @@
 ---
 
-- name: Update Timezone to {{ timezone }}
-  copy:
-    dest: /etc/timezone
-    content: "{{ timezone }}\n"
-  register: timezone
+- name: System timezone is set to {{ timezone }}
+  community.general.timezone:
+    name: "{{ timezone }}"
+  notify: restart cron
 
-- name: Reconfigure Timezone Data
-  command: dpkg-reconfigure -f noninteractive tzdata
-  when: timezone.changed
+- name: Configure legacy English locales
+  when: ansible_facts['distribution_version'] is version('26.04', '<')
+  block:
+    - name: Check legacy English locale list
+      ansible.builtin.stat:
+        path: /var/lib/locales/supported.d/en
+      register: legacy_en_locales
 
-- name: locales are present
-  locale_gen:
-    name: "{{ item }}"
+    - name: Keep only en_US.UTF-8 in legacy English locale list
+      ansible.builtin.copy:
+        dest: /var/lib/locales/supported.d/en
+        content: "en_US.UTF-8 UTF-8\n"
+        owner: root
+        group: root
+        mode: "0644"
+      when: legacy_en_locales.stat.exists
+
+- name: Required locales are generated
+  community.general.locale_gen:
+    name: "{{ locales }}"
     state: present
-  with_items:
-   - en_US.UTF-8
-   - cs_CZ.UTF-8

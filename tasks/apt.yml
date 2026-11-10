@@ -1,19 +1,17 @@
 ---
 
-#- name: APT cz source is set
-#  lineinfile:
-#    dest: /etc/apt/sources.list.d/ubuntu.sources
-#    insertafter: "## See the sources.list(5) manual page for further settings."
-#    line: |
-#      Types: deb
-#      URIs: http://cz.archive.ubuntu.com/ubuntu
-#    state: present
-#  when: ansible_distribution_version in ["24.04"]
+- name: APT mirror is set
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list.d/ubuntu.sources
+    regexp: '^([ \t]*URIs:[ \t]+https?://)(?:[a-z0-9.-]+\.)?archive\.ubuntu\.com(?=/ubuntu(?:/|[ \t]|$))'
+    replace: '\g<1>{{ apt_mirror }}'
+  when: ansible_facts['distribution_version'] is version('24.04', '>=')
+  register: apt_mirror_source
 
 - name: apt cache is updated
   apt:
     update_cache: true
-    cache_valid_time: "{{ apt_cache_valid_time }}"
+    cache_valid_time: "{{ 0 if apt_mirror_source is changed else apt_cache_valid_time }}"
 
 - name: Divert and rename apt-esm-hook
   community.general.dpkg_divert:
@@ -33,13 +31,20 @@
     state: present
 
 - name: unattended-upgrades is configured
-  template:
+  ansible.builtin.template:
     src: unattended-upgrades.j2
     dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    owner: root
+    group: root
+    mode: "0644"
+    validate: apt-config -c %s dump
 
 - name: unattended-upgrades autoupgrade is allowed
-  debconf:
-    name: unattended-upgrades
-    question: "unattended-upgrades/enable_auto_updates"
-    value: "true"
-    vtype: boolean
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
