@@ -1,20 +1,34 @@
 ---
 
-- name: Gather service facts
-  ansible.builtin.service_facts:
+- name: Check required systemd unit files
+  ansible.builtin.command:
+    argv:
+      - systemctl
+      - list-unit-files
+      - --type=service
+      - --no-legend
+      - --no-pager
+      - systemd-resolved.service
+      - ntp.service
+      - systemd-timesyncd.service
+  environment:
+    LC_ALL: C
+  register: common_systemd_unit_files
+  changed_when: false
+  check_mode: false
 
 - import_tasks: locales.yml
 - import_tasks: apt.yml
+- import_tasks: ubuntu-pro.yml
 - import_tasks: packages.yml
 - import_tasks: bash.yml
 - import_tasks: dns.yml
 - import_tasks: fail2ban.yml
 - import_tasks: ipmitool.yml
-  when: ansible_virtualization_role != "guest"
+  when: ansible_facts['virtualization_role'] != "guest"
 - import_tasks: smartmontools.yml
-  when: ansible_virtualization_role != "guest"
+  when: ansible_facts['virtualization_role'] != "guest"
 - import_tasks: motd.yml
-- import_tasks: ubuntu-pro.yml
 - import_tasks: ntp.yml
 - import_tasks: systemd-timesyncd.yml
 - import_tasks: chrony.yml

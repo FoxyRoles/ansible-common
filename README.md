@@ -32,6 +32,13 @@ import if needed.
 - name: Configure Ubuntu servers
   hosts: myserver
   remote_user: root
+  gather_subset:
+    - '!all'
+    - '!min'
+    - distribution
+    - virtual
+    - pkg_mgr
+    - service_mgr
   vars:
     admin_email: admin@example.com
     admin_ips:
@@ -44,6 +51,39 @@ import if needed.
 
 When connecting as an unprivileged user, set `remote_user` accordingly and add
 `become: true` to the play.
+
+## Execution speed
+
+The example limits fact gathering to the distribution, virtualization and package
+and service managers needed by this role. If the play also runs other roles,
+include any additional fact subsets they require. Setting `filter` alone only
+limits the returned facts; use
+[`gather_subset`](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/setup_module.html)
+to reduce the work performed on the server.
+
+For SSH connections, enable
+[pipelining](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/ssh_connection.html#parameter-pipelining)
+for an individual run using an environment variable to reduce module transfer
+overhead:
+
+```sh
+ANSIBLE_PIPELINING=true ansible-playbook playbook.yml
+```
+
+This applies only to that command. When using sudo, its `requiretty` option
+must still be disabled on the target. Connecting directly as root does not
+require changing sudoers.
+
+The role queries systemd once for the three service unit files it needs instead
+of collecting facts about every service. Ubuntu Pro configuration runs once.
+The APT cache refresh shares a task with ensuring that `unattended-upgrades`
+is installed.
+
+To measure individual tasks without changing your Ansible configuration:
+
+```sh
+ANSIBLE_CALLBACKS_ENABLED=ansible.posix.profile_tasks ansible-playbook playbook.yml
+```
 
 ## Variables without defaults
 
@@ -115,7 +155,7 @@ locales:
 | --- | --- |
 | `apt_cache_valid_time` | APT cache validity in seconds. A mirror change forces a cache refresh. |
 | `apt_mirror` | Archive hostname, without a URL scheme or path. On Ubuntu 24.04 and later, replaces standard, regional or cloud `archive.ubuntu.com` hostnames in `/etc/apt/sources.list.d/ubuntu.sources`, preserving the rest of the file. Security and ports archive URLs are left unchanged. |
-| `dns_servers` | Nameservers written to `/etc/resolv.conf` when creating it. The DNS tasks use service facts to stop and disable systemd-resolved when installed, remove a resolv.conf symlink and create a regular file. An existing regular file is not overwritten. |
+| `dns_servers` | Nameservers written to `/etc/resolv.conf` when creating it. The role queries systemd for the required service unit files, stops and disables systemd-resolved when installed, removes a resolv.conf symlink and creates a regular file. An existing regular file is not overwritten. |
 | `systemd_journal_max_size` | Value of `SystemMaxUse` in `/etc/systemd/journald.conf.d/99-common.conf`. Changes restart journald. |
 | `timezone` | System timezone managed by `community.general.timezone`. Changes notify the cron restart handler. |
 | `locales` | Locales ensured present by `community.general.locale_gen`; other enabled locales are not automatically removed. Before Ubuntu 26.04, an existing `/var/lib/locales/supported.d/en` is restricted to `en_US.UTF-8 UTF-8`, independently of this list. |
@@ -148,7 +188,7 @@ origin are not enabled by this list. Error reports go to `admin_email` using
 `MailReport = only-on-error`. Unused automatically installed packages are removed
 after upgrades, equivalent to `apt autoremove`.
 
-The APT tasks import [tasks/ubuntu-pro.yml](tasks/ubuntu-pro.yml) to suppress
+The role imports [tasks/ubuntu-pro.yml](tasks/ubuntu-pro.yml) to suppress
 Ubuntu Pro messages while keeping the Pro client installed. APT News is disabled
 through `pro config set apt_news=false`. The role manages
 `/etc/apt/apt.conf.d/20apt-esm-hook.conf` with no hook commands, leaving other APT

@@ -5,7 +5,7 @@
     name: ntp
     state: stopped
     enabled: no
-  when: ansible_facts['services']['ntp.service']['status'] | default('not-found') != 'not-found'
+  when: "'ntp.service' in (common_systemd_unit_files.stdout_lines | map('split') | map('first'))"
   tags: ntp
 
 - name: ntp is absent

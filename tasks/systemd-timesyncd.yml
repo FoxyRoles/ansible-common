@@ -5,7 +5,7 @@
     name: systemd-timesyncd
     state: stopped
     enabled: no
-  when: ansible_facts['services']['systemd-timesyncd.service']['status'] | default('not-found') != 'not-found'
+  when: "'systemd-timesyncd.service' in (common_systemd_unit_files.stdout_lines | map('split') | map('first'))"
   tags: systemd-timesyncd
 
 - name: systemd-timesyncd is absent

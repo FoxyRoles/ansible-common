@@ -8,17 +8,12 @@
   when: ansible_facts['distribution_version'] is version('24.04', '>=')
   register: apt_mirror_source
 
-- ansible.builtin.import_tasks: ubuntu-pro.yml
-
-- name: apt cache is updated
-  apt:
+- name: Refresh APT cache and ensure unattended-upgrades is installed
+  ansible.builtin.apt:
+    name: unattended-upgrades
+    state: present
     update_cache: true
     cache_valid_time: "{{ 0 if apt_mirror_source is changed else apt_cache_valid_time }}"
-
-- name: unattended-upgrades package is present
-  apt:
-    pkg: unattended-upgrades
-    state: present
 
 - name: unattended-upgrades is configured
   ansible.builtin.template:
