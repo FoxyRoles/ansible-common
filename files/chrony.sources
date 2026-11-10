@@ -1,0 +1,3 @@
+server tik.cesnet.cz iburst prefer
+server tak.cesnet.cz iburst
+server ntp.nic.cz iburst

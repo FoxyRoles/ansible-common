@@ -1,7 +1,9 @@
 ---
 
 - name: postfix is present
-  apt: pkg=postfix state=present
+  apt:
+    pkg: postfix
+    state: present
   tags: postfix
 
 - name: postfix myhostname is set

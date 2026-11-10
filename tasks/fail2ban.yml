@@ -17,6 +17,6 @@
   lineinfile:
     dest: /etc/fail2ban/jail.conf
     regexp: "^#?ignoreip ="
-    line: "ignoreip = 127.0.0.1/8 ::1 {{ allow_global_ip }}/32"
+    line: "ignoreip = 127.0.0.1/8 ::1 {{ admin_ips | map('ansible.utils.ipaddr', 'host') | join(' ') }}"
   notify:
    - restart fail2ban

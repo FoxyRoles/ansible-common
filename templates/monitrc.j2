@@ -12,6 +12,8 @@ set eventqueue
 
 set httpd port 2812 and
     use address 0.0.0.0
-    allow {{ allow_global_ip }}
+{% for ip in admin_ips %}
+    allow {{ ip }}
+{% endfor %}
 
 include /etc/monit/conf.d/*

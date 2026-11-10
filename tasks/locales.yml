@@ -1,25 +1,19 @@
 ---
 
-- name: locales are absent
-  locale_gen:
-    name: "{{ item }}"
-    state: absent
-  with_items:
-   - en_AU.UTF-8
-   - en_BW.UTF-8
-   - en_CA.UTF-8
-   - en_DK.UTF-8
-   - en_GB.UTF-8
-   - en_HK.UTF-8
-   - en_IE.UTF-8
-   - en_NZ.UTF-8
-   - en_PH.UTF-8
-   - en_SG.UTF-8
-   - en_ZA.UTF-8
-   - en_ZW.UTF-8
+- name: Update Timezone to {{ timezone }}
+  copy:
+    dest: /etc/timezone
+    content: "{{ timezone }}\n"
+  register: timezone
+
+- name: Reconfigure Timezone Data
+  command: dpkg-reconfigure -f noninteractive tzdata
+  when: timezone.changed
 
 - name: locales are present
-  locale_gen: name="{{ item }}" state=present
+  locale_gen:
+    name: "{{ item }}"
+    state: present
   with_items:
    - en_US.UTF-8
    - cs_CZ.UTF-8

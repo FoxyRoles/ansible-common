@@ -2,6 +2,8 @@
 
 - name: smartmontools is installed
   apt:
-    pkg: smartmontools
+    pkg:
+      - nvme-cli
+      - smartmontools
     state: present
   tags: smart

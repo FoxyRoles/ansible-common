@@ -1,0 +1,32 @@
+---
+
+- name: chrony is present
+  apt:
+    pkg: chrony
+    state: present
+  tags: chrony
+
+- name: chrony is enabled
+  service:
+    name: chrony
+    state: started
+    enabled: yes
+  tags: chrony
+
+- name: chrony default servers are absent
+  lineinfile:
+    dest: /etc/chrony/chrony.conf
+    regexp: '^pool '
+    state: absent
+  notify:
+    - restart chrony
+  tags: chrony
+
+- name: copy /etc/chrony/sources.d/czech.sources
+  copy:
+    src: chrony.sources
+    dest: /etc/chrony/sources.d/czech.sources
+    mode: 0644
+  notify:
+    - restart chrony
+  tags: chrony

@@ -1,5 +1,6 @@
 ---
 
+- import_tasks: locales.yml
 - import_tasks: apt.yml
 - import_tasks: packages.yml
 - import_tasks: bash.yml
@@ -12,9 +13,12 @@
   when: ansible_virtualization_role != "guest"
 - import_tasks: motd.yml
 - import_tasks: ntp.yml
+- import_tasks: systemd-timesyncd.yml
+- import_tasks: chrony.yml
 - import_tasks: postfix.yml
 - import_tasks: ssh.yml
 - import_tasks: cloud-init.yml
-  when: ansible_distribution_version in ["20.04", "22.04"]
+- import_tasks: sysctl.yml
 - import_tasks: systemd.yml
-  when: ansible_distribution_version in ["18.04", "20.04", "22.04"]
+- import_tasks: zfs.yml
+  when: ansible_distribution_version in ["24.04"]

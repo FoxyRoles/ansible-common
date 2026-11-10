@@ -13,7 +13,9 @@ This role is highly opinionated. You should fork it and make your own adjustment
   sudo: False
   vars:
     admin_email: my@mail.tld
-    allow_global_ip: 192.168.1.1
+    admin_ips:
+      - 192.168.1.1
+      - 192.168.1.2
   roles:
    - sunfoxcz.common
 ```
@@ -21,7 +23,7 @@ This role is highly opinionated. You should fork it and make your own adjustment
 ## Mandatory variables
 
  * admin_email
- * allow_global_ip
+ * admin_ips
 
 ## Optional variables
 

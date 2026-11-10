@@ -29,6 +29,11 @@
     name: systemd-journald
     state: restarted
 
+- name: restart chrony
+  service:
+    name: chrony
+    state: restarted
+
 - name: swap used
   command: swapon -a
 

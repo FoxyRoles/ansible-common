@@ -1,8 +1,4 @@
 ---
-- name: MOTD help text is disabled
-  file:
-    path: /etc/update-motd.d/10-help-text
-    mode: "0644"
 
 - name: Check if /etc/default/motd-news file exists
   stat:
@@ -14,4 +10,26 @@
     dest: /etc/default/motd-news
     regexp: ^ENABLED=
     line: ENABLED=0
-  when: motdnews.stat.isfile is defined and motdnews.stat.isfile
+  when: motdnews.stat.exists
+
+- name: Check if /etc/update-motd.d/10-help-text file exists
+  stat:
+    path: /etc/update-motd.d/10-help-text
+  register: helptext
+
+- name: MOTD help text is disabled
+  file:
+    path: /etc/update-motd.d/10-help-text
+    mode: "0644"
+  when: helptext.stat.exists
+
+- name: Check if /etc/update-motd.d/91-contract-ua-esm-status file exists
+  stat:
+    path: /etc/update-motd.d/91-contract-ua-esm-status
+  register: esmstatus
+
+- name: MOTD ESM status is disabled
+  file:
+    path: /etc/update-motd.d/91-contract-ua-esm-status
+    mode: "0644"
+  when: esmstatus.stat.exists

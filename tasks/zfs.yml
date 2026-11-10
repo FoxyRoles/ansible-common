@@ -1,0 +1,13 @@
+---
+
+- name: Check if /usr/sbin/zpool exists
+  stat:
+    path: /usr/sbin/zpool
+  register: zpool_bin
+  
+- name: Divert zpool_influxdb to influxdb_zpool
+  community.general.dpkg_divert:
+    path: /usr/bin/zpool_influxdb
+    divert: /usr/bin/influxdb_zpool
+    rename: true
+  when: zpool_bin.stat.exists
