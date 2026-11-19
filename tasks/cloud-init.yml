@@ -1,7 +1,9 @@
 ---
 
-- name: cloud-init is absent
+- name: Remove cloud-init packages
   apt:
-    pkg: cloud-init
+    pkg:
+      - cloud-init
+      - cloud-init-base
     state: absent
   tags: cloud-init

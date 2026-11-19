@@ -216,7 +216,7 @@ and [MOTD messages](https://ubuntu.com/pro-client/docs/en/latest/explanations/mo
   distributed `.conf` files untouched.
 - `ipmitool.yml` and `smartmontools.yml` install hardware tools, including
   `nvme-cli`; their import conditions exclude guests.
-- `cloud-init.yml` removes the `cloud-init` package.
+- `cloud-init.yml` removes the `cloud-init` and `cloud-init-base` packages.
 - `sysctl.yml` applies fixed swap, file limit and network settings.
 - `zfs.yml` diverts `zpool_influxdb` to `influxdb_zpool` when `zfsutils-linux`
   is installed, using a targeted `dpkg-query` check. It runs on Ubuntu 24.04
