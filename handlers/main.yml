@@ -14,14 +14,6 @@
     name: monit
     state: restarted
 
-- name: restart postfix
-  ansible.builtin.service:
-    name: postfix
-    state: restarted
-
-- name: update aliases
-  ansible.builtin.command: newaliases
-
 - name: restart fail2ban
   ansible.builtin.service:
     name: fail2ban

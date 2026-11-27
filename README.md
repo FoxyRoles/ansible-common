@@ -27,6 +27,9 @@ import if needed.
 - The `ansible.posix` collection for sysctl tasks.
 - The `locales` and `tzdata` packages on the target when enabling locale and
   timezone tasks.
+- A local mail setup providing `sendmail` or `mailx` to deliver
+  unattended-upgrades error reports. Add `sunfoxcz.postfix`
+  after this role to configure Postfix for delivery.
 
 ## Example playbook
 
@@ -47,9 +50,9 @@ import if needed.
     admin_ips:
       - 192.0.2.10
       - 2001:db8::10
-    postfix_myhostname: vps01.example.com
   roles:
     - sunfoxcz.common
+    - sunfoxcz.postfix
 ```
 
 When connecting as an unprivileged user, set `remote_user` accordingly and add
@@ -92,39 +95,10 @@ ANSIBLE_CALLBACKS_ENABLED=ansible.posix.profile_tasks ansible-playbook playbook.
 
 | Variable | Used by | Description |
 | --- | --- | --- |
-| `admin_email` | Postfix and unattended-upgrades | Recipient for local root mail and unattended-upgrades error reports. Required by these task groups. |
+| `admin_email` | unattended-upgrades | Recipient for unattended-upgrades error reports. |
 | `admin_ips` | Fail2ban and Monit | List of administrator IPv4 or IPv6 addresses to allow. Required when enabling these tasks. |
 
 ## Optional variables
-
-### `postfix_myhostname`
-
-The fully qualified hostname Postfix should use to identify this server, for
-example:
-
-```yaml
-postfix_myhostname: vps01.example.com
-```
-
-When defined, the role sets `myhostname` in `/etc/postfix/main.cf` and notifies
-the Postfix restart handler. The role always sets
-`mydestination = $myhostname, localhost`, so this hostname is also treated as a
-local mail destination. With Postfix's default `smtp_helo_name`, it is the name
-sent in outgoing SMTP HELO/EHLO commands.
-
-When omitted, the role leaves `myhostname` untouched. An existing configured
-value remains in use; otherwise Postfix derives its default from the system
-hostname and domain configuration.
-
-This variable changes Postfix configuration only. It does not rename the server,
-update DNS records or write `/etc/mailname`. The role does not set `myorigin`,
-which controls the domain added to locally submitted unqualified addresses, so
-the sender address also depends on the existing Postfix configuration.
-
-See the Postfix documentation for
-[`myhostname`](https://manpages.debian.org/trixie/postfix/postconf.5.en.html#myhostname),
-[`smtp_helo_name`](https://manpages.debian.org/trixie/postfix/postconf.5.en.html#smtp_helo_name)
-and [`myorigin`](https://manpages.debian.org/trixie/postfix/postconf.5.en.html#myorigin).
 
 ### `root_default_password`
 
@@ -162,21 +136,6 @@ locales:
 | `systemd_journal_max_size` | Value of `SystemMaxUse` in `/etc/systemd/journald.conf.d/99-common.conf`. Changes restart journald. |
 | `timezone` | System timezone managed by `community.general.timezone`. Changes notify the cron restart handler. |
 | `locales` | Locales ensured present by `community.general.locale_gen`; other enabled locales are not automatically removed. Before Ubuntu 26.04, an existing `/var/lib/locales/supported.d/en` is restricted to `en_US.UTF-8 UTF-8`, independently of this list. |
-
-## Mail delivery
-
-The Postfix tasks install and enable Postfix, forward mail addressed to the local
-root user to `admin_email` through `/etc/aliases`, and run `newaliases` when the
-alias changes. They also configure IPv4-only mail transport and opportunistic
-outgoing TLS (`smtp_tls_security_level = may`).
-
-Cron jobs that send their output to root use this alias without needing a
-`MAILTO` entry. Existing `MAILTO` settings in crontab files are left unchanged:
-explicit recipients and an empty value that disables mail take precedence.
-Mail addressed to other local users is not redirected by the root alias.
-
-The role does not configure an SMTP relay or SMTP authentication. External mail
-delivery uses the target's existing Postfix routing configuration.
 
 ## Automatic updates
 
