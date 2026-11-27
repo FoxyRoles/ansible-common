@@ -9,7 +9,7 @@
   tags: ntp
 
 - name: ntp is absent
-  apt:
+  ansible.builtin.apt:
     pkg: ntp
     state: absent
   tags: ntp

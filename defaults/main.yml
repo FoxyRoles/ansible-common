@@ -1,5 +1,7 @@
 ---
 
+common_managed_comment: "{{ ansible_managed | default('Ansible managed') }}"
+
 apt_cache_valid_time: 86400
 apt_mirror: cz.archive.ubuntu.com
 

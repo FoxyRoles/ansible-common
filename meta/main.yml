@@ -1,0 +1,22 @@
+---
+
+galaxy_info:
+  namespace: sunfoxcz
+  role_name: common
+  author: Tomas Jacik
+  description: Apply common system settings and install base packages on Ubuntu.
+  company: sunfoxcz
+  license: MIT
+  min_ansible_version: '2.19'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+        - noble
+        - resolute
+  galaxy_tags:
+    - system
+    - ubuntu
+
+dependencies: []

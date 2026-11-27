@@ -1,7 +1,7 @@
 ---
 
 - name: ensure basic packages are present
-  apt:
+  ansible.builtin.apt:
     pkg:
       - acpid
       - bash-completion

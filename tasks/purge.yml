@@ -1,7 +1,7 @@
 ---
 
 - name: ensure not installed
-  apt:
+  ansible.builtin.apt:
     pkg:
       - ppp
       - pppconfig

@@ -8,18 +8,18 @@
   when: "'systemd-resolved.service' in (common_systemd_unit_files.stdout_lines | map('split') | map('first'))"
 
 - name: check if /etc/resolv.conf is symlink
-  stat:
+  ansible.builtin.stat:
     path: /etc/resolv.conf
   register: resolvconf
 
 - name: ensure /etc/resolv.conf is not symlink
-  file:
+  ansible.builtin.file:
     path: /etc/resolv.conf
     state: absent
   when: resolvconf.stat.islnk is defined and resolvconf.stat.islnk
 
 - name: ensure /etc/resolv.conf exists and have nameservers set
-  copy:
+  ansible.builtin.copy:
     dest: /etc/resolv.conf
     content: |
       {% for server in dns_servers %}

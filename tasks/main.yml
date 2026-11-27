@@ -17,25 +17,25 @@
   changed_when: false
   check_mode: false
 
-- import_tasks: locales.yml
-- import_tasks: apt.yml
-- import_tasks: ubuntu-pro.yml
-- import_tasks: packages.yml
-- import_tasks: bash.yml
-- import_tasks: dns.yml
-- import_tasks: fail2ban.yml
-- import_tasks: ipmitool.yml
+- ansible.builtin.import_tasks: locales.yml
+- ansible.builtin.import_tasks: apt.yml
+- ansible.builtin.import_tasks: ubuntu-pro.yml
+- ansible.builtin.import_tasks: packages.yml
+- ansible.builtin.import_tasks: bash.yml
+- ansible.builtin.import_tasks: dns.yml
+- ansible.builtin.import_tasks: fail2ban.yml
+- ansible.builtin.import_tasks: ipmitool.yml
   when: ansible_facts['virtualization_role'] != "guest"
-- import_tasks: smartmontools.yml
+- ansible.builtin.import_tasks: smartmontools.yml
   when: ansible_facts['virtualization_role'] != "guest"
-- import_tasks: motd.yml
-- import_tasks: ntp.yml
-- import_tasks: systemd-timesyncd.yml
-- import_tasks: chrony.yml
-- import_tasks: postfix.yml
-- import_tasks: ssh.yml
-- import_tasks: cloud-init.yml
-- import_tasks: sysctl.yml
-- import_tasks: systemd.yml
-- import_tasks: zfs.yml
+- ansible.builtin.import_tasks: motd.yml
+- ansible.builtin.import_tasks: ntp.yml
+- ansible.builtin.import_tasks: systemd-timesyncd.yml
+- ansible.builtin.import_tasks: chrony.yml
+- ansible.builtin.import_tasks: postfix.yml
+- ansible.builtin.import_tasks: ssh.yml
+- ansible.builtin.import_tasks: cloud-init.yml
+- ansible.builtin.import_tasks: sysctl.yml
+- ansible.builtin.import_tasks: systemd.yml
+- ansible.builtin.import_tasks: zfs.yml
   when: ansible_facts['distribution_version'] is version('24.04', '>=')

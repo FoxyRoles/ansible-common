@@ -1,7 +1,7 @@
 ---
 
 - name: Remove cloud-init packages
-  apt:
+  ansible.builtin.apt:
     pkg:
       - cloud-init
       - cloud-init-base

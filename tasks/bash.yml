@@ -1,20 +1,20 @@
 ---
 
 - name: bash is default shell
-  debconf:
+  ansible.builtin.debconf:
     name: dash
     question: "dash/sh"
     value: "false"
     vtype: boolean
 
 - name: copy /root/.bashrc
-  copy:
+  ansible.builtin.copy:
     src: root.bashrc
     dest: /root/.bashrc
     mode: 0644
 
 - name: copy /etc/skel/.bashrc
-  copy:
+  ansible.builtin.copy:
     src: skel.bashrc
     dest: /etc/skel/.bashrc
     mode: 0644

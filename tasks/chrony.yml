@@ -10,20 +10,20 @@
   tags: chrony
 
 - name: chrony is present
-  apt:
+  ansible.builtin.apt:
     pkg: chrony
     state: present
   tags: chrony
 
 - name: chrony is enabled
-  service:
+  ansible.builtin.service:
     name: chrony
     state: started
     enabled: yes
   tags: chrony
 
 - name: chrony default servers are absent
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/chrony/chrony.conf
     regexp: '^pool '
     state: absent
@@ -32,7 +32,7 @@
   tags: chrony
 
 - name: ubuntu default servers are absent
-  file:
+  ansible.builtin.file:
     path: /etc/chrony/sources.d/ubuntu-ntp-pools.sources
     state: absent
   notify:
@@ -40,7 +40,7 @@
   tags: chrony
 
 - name: copy /etc/chrony/sources.d/czech.sources
-  copy:
+  ansible.builtin.copy:
     src: chrony.sources
     dest: /etc/chrony/sources.d/czech.sources
     mode: 0644

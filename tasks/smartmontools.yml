@@ -1,7 +1,7 @@
 ---
 
 - name: smartmontools is installed
-  apt:
+  ansible.builtin.apt:
     pkg:
       - nvme-cli
       - smartmontools

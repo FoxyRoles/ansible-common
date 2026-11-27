@@ -9,7 +9,7 @@
   tags: systemd-timesyncd
 
 - name: systemd-timesyncd is absent
-  apt:
+  ansible.builtin.apt:
     pkg: systemd-timesyncd
     state: absent
   tags: systemd-timesyncd

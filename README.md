@@ -12,7 +12,10 @@ import if needed.
 
 ## Requirements
 
-- An Ubuntu target with APT, systemd and Python available for Ansible.
+- `ansible-core` 2.19 or newer.
+- An Ubuntu target with APT, systemd and a Python version supported by the
+  controller's `ansible-core`. Use `ansible-core` 2.19.x with Ubuntu 20.04's
+  system Python 3.8.
 - Root privileges, either by connecting as root or using `become: true`.
 - Fact gathering enabled for tasks that inspect the Ubuntu version or
   virtualization role.

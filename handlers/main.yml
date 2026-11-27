@@ -1,21 +1,21 @@
 ---
 - name: restart ntp
-  service:
+  ansible.builtin.service:
     name: ntp
     state: restarted
 
 - name: restart cron
-  service:
+  ansible.builtin.service:
     name: cron
     state: restarted
 
 - name: restart monit
-  service:
+  ansible.builtin.service:
     name: monit
     state: restarted
 
 - name: restart postfix
-  service:
+  ansible.builtin.service:
     name: postfix
     state: restarted
 
@@ -23,22 +23,22 @@
   ansible.builtin.command: newaliases
 
 - name: restart fail2ban
-  service:
+  ansible.builtin.service:
     name: fail2ban
     state: restarted
 
 - name: restart journald
-  service:
+  ansible.builtin.service:
     name: systemd-journald
     state: restarted
 
 - name: restart chrony
-  service:
+  ansible.builtin.service:
     name: chrony
     state: restarted
 
 - name: swap used
-  command: swapon -a
+  ansible.builtin.command: swapon -a
 
 - name: update grub
-  command: update-grub
+  ansible.builtin.command: update-grub

@@ -1,4 +1,4 @@
-// {{ ansible_managed }}
+{{ common_managed_comment | comment('c', prefix='', postfix='') | trim }}
 
 // Automatically upgrade packages from these (origin:archive) pairs
 #clear Unattended-Upgrade::Allowed-Origins;

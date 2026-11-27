@@ -1,13 +1,13 @@
 ---
 
 - name: monit is installed
-  apt:
+  ansible.builtin.apt:
     pkg: monit
     state: present
   tags: monit
 
 - name: monit is configured
-  template:
+  ansible.builtin.template:
     src: monitrc.j2
     dest: /etc/monit/monitrc
   notify:

@@ -1,7 +1,7 @@
 ---
 
 - name: root password is set
-  user:
+  ansible.builtin.user:
     name: root
     state: present
     update_password: always

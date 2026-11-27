@@ -1,7 +1,7 @@
 ---
 
 - name: ipmitool is present
-  apt:
+  ansible.builtin.apt:
     pkg: ipmitool
     state: present
   tags: ipmi

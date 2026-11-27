@@ -1,7 +1,7 @@
 ---
 
 - name: ensure net.ifnames is disabled in kernel
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: present
     dest: /etc/default/grub
     backrefs: yes
@@ -11,7 +11,7 @@
    - update grub
 
 - name: ensure biosdevname is disabled in kernel
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: present
     dest: /etc/default/grub
     backrefs: yes
